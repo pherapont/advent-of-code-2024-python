@@ -4,28 +4,33 @@
     полученных чисел.
 '''
 import re
+from itertools import chain
 
 
 def parser(text: str) -> list[str]:
     res = re.findall(r'mul\(\d+,\d+\)', text)
     return res
 
-def extract_nums_from(mul: str) -> list(int):
+
+def extract_nums_from(mul: str) -> list[int]:
     '''
     Функция извлекает два числа из строки
     типа "mul(213,432)" с числами разной разрядности
     '''
-    ...
+    snums = re.findall(r"\d+", mul)
+    return [int(snum) for snum in snums]
 
 
 def main(datafile: str) -> int:
-    data = []
+    row_data = []
     with open(datafile, 'r') as df:
         for line in df:
-            data.append(parser(line))
-
-    print(data)
+            row_data.append(parser(line))
+    print([x for x in chain(row_data)])
+    #data = [extract_nums_from(x) for x in chain(row_data)]
+    #print(data)
     return 0
 
+
 if __name__ == '__main__':
-    main('data.txt')
+   main('data.txt')
