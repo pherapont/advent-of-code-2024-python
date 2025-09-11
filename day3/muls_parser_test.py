@@ -19,6 +19,9 @@ class TestParser(unittest.TestCase):
         res = [5, 294]
         self.assertEqual(extract_nums_from(data), res)
 
+    def test_calc_prod(self):
+        ...
+
 
 if __name__ == '__main__':
     unittest.main()
