@@ -5,6 +5,7 @@
 '''
 import re
 from itertools import chain
+from collections.abc import Iterable
 
 
 def parser(text: str) -> list[str]:
@@ -21,7 +22,7 @@ def extract_nums_from(mul: str) -> list[int]:
     return [int(snum) for snum in snums]
 
 
-def calc_prod(nums):
+def calc_prod(nums: Iterable[list[int]]) -> int:
     res = sum(map(lambda x: x[0] * x[1], nums))
     return res
 
