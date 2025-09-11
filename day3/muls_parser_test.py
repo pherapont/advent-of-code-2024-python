@@ -1,5 +1,5 @@
 import unittest
-from muls_parser import parser, extract_nums_from, calc_prod
+from muls_parser import parser, extract_nums_from, calc_prod, get_chanks
 
 
 class TestParser(unittest.TestCase):
@@ -28,6 +28,11 @@ class TestParser(unittest.TestCase):
         data = [[234569, 85432], [222222, 444444], [10000000, 55858585]]
         sum_prod = 558704654933376
         self.assertEqual(calc_prod(data), sum_prod)
+
+    def test_get_chanks(self):
+        data = "[?mul(813,364)?whydon't()<,'mul(942, 587){howdo()mul(704,164)#$select"
+        res = "[?mul(813,364)?whymul(704,164)#$select"
+        self.assertEqual(get_chanks(data), res)
 
 
 if __name__ == '__main__':
