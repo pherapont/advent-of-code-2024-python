@@ -1,5 +1,5 @@
 import unittest
-from muls_parser import parser, extract_nums_from
+from muls_parser import parser, extract_nums_from, calc_prod
 
 
 class TestParser(unittest.TestCase):
@@ -19,8 +19,15 @@ class TestParser(unittest.TestCase):
         res = [5, 294]
         self.assertEqual(extract_nums_from(data), res)
 
-    def test_calc_prod(self):
-        ...
+    def test_calc_simple_prod(self):
+        data = [[1, 2], [3, 4], [10, 5]]
+        sum_prod = 64
+        self.assertEqual(calc_prod(data), sum_prod)
+
+    def test_calc_large_numbers_prod(self):
+        data = [[234569, 85432], [222222, 444444], [10000000, 55858585]]
+        sum_prod = 558704654933376
+        self.assertEqual(calc_prod(data), sum_prod)
 
 
 if __name__ == '__main__':

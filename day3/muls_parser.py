@@ -22,7 +22,8 @@ def extract_nums_from(mul: str) -> list[int]:
 
 
 def calc_prod(nums):
-    ...
+    res = sum(map(lambda x: x[0] * x[1], nums))
+    return res
 
 
 def main(datafile: str) -> int:
@@ -30,11 +31,10 @@ def main(datafile: str) -> int:
     with open(datafile, 'r') as df:
         for line in df:
             row_data.append(parser(line))
-    #print([x for x in chain.from_iterable(row_data)])
     data = (extract_nums_from(x) for x in chain.from_iterable(row_data))
-    print(data)
-    return 0
+    res = calc_prod(data)
+    return res
 
 
 if __name__ == '__main__':
-   main('data.txt')
+   print(main('data.txt'))
