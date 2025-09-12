@@ -1,5 +1,5 @@
 import unittest
-from muls_parser import parser, extract_nums_from, calc_prod, get_chanks
+from muls_parser import parser, extract_nums_from, calc_prod, get_chanks, main
 from data_test import input1, res1
 
 
@@ -39,6 +39,12 @@ class TestParser(unittest.TestCase):
 
     def test_get_chanks_more_dont(self):
         self.assertEqual(get_chanks(input1), res1)
+
+    def test_main_function(self):
+        self.assertEqual(main("data_integr_test_1.txt"), 1_198_127)
+    
+    def test_main_with_data_from_site(self):
+        self.assertEqual(main("data_integr_test_2.txt"), 48)
 
 
 if __name__ == '__main__':
