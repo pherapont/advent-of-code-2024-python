@@ -20,6 +20,10 @@ def get_chanks(text: str) -> str:
 
 
 def parser(text: str) -> list[str]:
+    '''
+    Function extract from string sequensis
+    type of "mul(434,281)"
+    '''
     res = re.findall(r'mul\(\d+,\d+\)', text)
     return res
 

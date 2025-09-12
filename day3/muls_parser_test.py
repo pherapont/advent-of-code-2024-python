@@ -1,8 +1,9 @@
 import unittest
 from muls_parser import parser, extract_nums_from, calc_prod, get_chanks
+from data_test import input1, res1
 
 
-class testparser(unittest.TestCase):
+class TestParser(unittest.TestCase):
 
     def test_parse(self):
         string = "from()why()?mul(603,692)({select()}] )]-(mul(387,685\
@@ -35,6 +36,9 @@ class testparser(unittest.TestCase):
 704,164)#$select"
         res = "[?mul(813,364)?whymul(704,164)#$select"
         self.assertEqual(get_chanks(data), res)
+
+    def test_get_chanks_more_dont(self):
+        self.assertEqual(get_chanks(input1), res1)
 
 
 if __name__ == '__main__':
