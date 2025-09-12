@@ -9,7 +9,7 @@ from itertools import chain
 from collections.abc import Iterable
 
 
-def get_chanks(text:str)->str:
+def get_chanks(text: str) -> str:
     '''
     The do() instruction enables future mul instructions.
     The don't() instruction disables future mul instructions.

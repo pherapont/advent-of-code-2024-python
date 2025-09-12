@@ -2,10 +2,11 @@ import unittest
 from muls_parser import parser, extract_nums_from, calc_prod, get_chanks
 
 
-class TestParser(unittest.TestCase):
+class testparser(unittest.TestCase):
 
     def test_parse(self):
-        string = "from()why()?mul(603,692)({select()}] )]-(mul(387,685)who()mul(28,717)w"
+        string = "from()why()?mul(603,692)({select()}] )]-(mul(387,685\
+)who()mul(28,717)w"
         res = ['mul(603,692)', 'mul(387,685)', 'mul(28,717)']
         self.assertEqual(parser(string), res)
 
@@ -30,7 +31,8 @@ class TestParser(unittest.TestCase):
         self.assertEqual(calc_prod(data), sum_prod)
 
     def test_get_chanks(self):
-        data = "[?mul(813,364)?whydon't()<,'mul(942, 587){howdo()mul(704,164)#$select"
+        data = "[?mul(813,364)?whydon't()<,'mul(942, 587){howdo()mul(\
+704,164)#$select"
         res = "[?mul(813,364)?whymul(704,164)#$select"
         self.assertEqual(get_chanks(data), res)
 
