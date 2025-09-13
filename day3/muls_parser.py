@@ -43,12 +43,11 @@ def calc_prod(nums: Iterable[list[int]]) -> int:
 
 
 def main(datafile: str) -> int:
-    row_data = []
-    with open(datafile, 'r') as df:
-        for line in df:
-            row_data.append(parser(get_chanks(line)))
-    data = (extract_nums_from(x) for x in chain.from_iterable(row_data))
-    res = calc_prod(data)
+    data: str
+    with open(datafile) as df:
+        data = get_chanks(df.read())
+    nums = [extract_nums_from(x) for x in parser(data)]
+    res = calc_prod(nums)
     return res
 
 

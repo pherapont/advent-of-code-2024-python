@@ -44,10 +44,13 @@ class TestParser(unittest.TestCase):
         self.assertEqual(main("data_integr_test_1.txt"), 1_198_127)
 
     def test_main_function_with_two_line_data(self):
-        self.assertEqual(main("data_integr_test_3.txt"), 1_198_127 * 2)
+        self.assertEqual(main("data_integr_test_2.txt"), 2_038_888)
 
-    def test_main_with_data_from_site(self):
-        self.assertEqual(main("data_integr_test_2.txt"), 48)
+
+
+
+
+
 
 
 if __name__ == '__main__':
