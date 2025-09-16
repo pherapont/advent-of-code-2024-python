@@ -15,3 +15,9 @@ horiz_overlap = """
     MMXMASAAAS
     SAMXMASAAS
 """
+
+simple_mas = """
+    MXS
+    XAZ
+    MYS
+"""
