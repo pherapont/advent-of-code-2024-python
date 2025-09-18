@@ -19,25 +19,28 @@ def parser_data(data_file: str) -> tuple[list[str], list[str]]:
     return rules, updates
 
 
-def filter_bad_updates(data: list[list[int]],
-                       rules: dict[int, set[int]]) -> list[list[int]]:
+def divide_updates(data: list[list[int]],
+                       rules: dict[int, set[int]]
+                   ) -> tuple[list[list[int]], list[list[int]]]:
     """
     Проверяем числа стоящие после в каждом update, если они
     встречаются в правиле, то это не корректный update
     """
     correct_update = []
+    uncorrect_update = []
     for update in data:
         flag = False
         for pos, num in enumerate(update[:-1]):
             if num in rules:
                 for check in update[pos+1:]:
                     if check in rules[num]:
+                        uncorrect_update.append(update)
                         flag = True
                         break
             if flag: break
         if flag: continue    
         correct_update.append(update)
-    return correct_update
+    return correct_update, uncorrect_update
 
 
 def transform_updates(row_updates: list[str]) -> list[list[int]]:
@@ -65,11 +68,30 @@ def finalize_rules(row_rules: list[str]) -> dict[int, set[int]]:
     return rules
 
 
+
+def correction_updates(uncorrect_updates: list[list[int]],
+                       rules: dict[int, set[int]]
+                       ) -> list[list[int]]:
+    corrected = []
+    for update in uncorrect_updates:
+        for pos, num in enumerate(update[: -1]):
+            flag = True
+            while flag:
+                for p, n in enumerate(update[pos + 1:]):
+                    if n in rules:
+                        update = [n, *update[:p], *update[p+1:]]
+                        flage = False
+        corrected.append(update)
+    return corrected
+
+
 def main(data_file: str) -> int:
     row_rules, row_updates = parser_data(data_file)
     updates = transform_updates(row_updates)
     rules = finalize_rules(row_rules)
-    correct_updates = filter_bad_updates(updates, rules)
+    correct_updates, uncorrect_updates = divide_updates(
+            updates, rules)
+    corrected = correction_updates(uncorrect_updates)
     return sum([x[len(x) // 2] for x in correct_updates])
 
 if __name__ == '__main__':
