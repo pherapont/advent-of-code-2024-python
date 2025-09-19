@@ -101,18 +101,39 @@ def correction_updates(uncorrect_updates: list[list[int]],
     return corrected
 
 
-def main(data_file: str) -> tuple[int, int]:
+# def main(data_file: str) -> tuple[int, int]:
+#     row_rules, row_updates = parser_data(data_file)
+#     updates = transform_updates(row_updates)
+#     rules = finalize_rules(row_rules)
+#     correct_updates, uncorrect_updates = divide_updates(
+#             updates, rules)
+#     corrected = correction_updates(uncorrect_updates, rules)
+#     sum_of_correct = sum([x[len(x) // 2] for x in correct_updates])
+#     sum_of_corrected = sum([x[len(x) // 2] for x in corrected])
+#     return sum_of_correct, sum_of_corrected
+# 
+
+def get_sum_corrects(data_file: str) -> int:
     row_rules, row_updates = parser_data(data_file)
     updates = transform_updates(row_updates)
     rules = finalize_rules(row_rules)
-    correct_updates, uncorrect_updates = divide_updates(
+    correct_updates, _ = divide_updates(
+            updates, rules)
+    sum_of_correct = sum([x[len(x) // 2] for x in correct_updates])
+    return sum_of_correct
+
+
+def get_sum_reviseds(data_file: str) -> int:
+    row_rules, row_updates = parser_data(data_file)
+    updates = transform_updates(row_updates)
+    rules = finalize_rules(row_rules)
+    _, uncorrect_updates = divide_updates(
             updates, rules)
     corrected = correction_updates(uncorrect_updates, rules)
-    sum_of_correct = sum([x[len(x) // 2] for x in correct_updates])
     sum_of_corrected = sum([x[len(x) // 2] for x in corrected])
-    return sum_of_correct, sum_of_corrected
+    return sum_of_corrected
 
 
 if __name__ == '__main__':
-    res = main("input_data.txt")
+    res = get_sum_reviseds("input_data.txt")
     print(res)

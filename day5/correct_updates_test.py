@@ -1,15 +1,14 @@
 import unittest
 from correct_updates import (parser_data, finalize_rules,
-                             divide_updates,
-                             correction_updates,
-                             transform_updates, main)
+             divide_updates, correction_updates, transform_updates,
+                             get_sum_reviseds, get_sum_corrects)
 
 class TestCorrectUpdates(unittest.TestCase):
     def test_correct_update_data_from_site(self):
-        self.assertEqual(main("test_data.txt")[0], 143)
+        self.assertEqual(get_sum_corrects("test_data.txt"), 143)
 
     def test_corrected_update_data_from_site(self):
-        self.assertEqual(main("test_data.txt")[1], 123)
+        self.assertEqual(get_sum_reviseds("test_data.txt"), 123)
 
     @unittest.skip("local test")
     def test_parser_data(self):
