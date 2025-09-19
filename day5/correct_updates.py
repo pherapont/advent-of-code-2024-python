@@ -72,27 +72,46 @@ def finalize_rules(row_rules: list[str]) -> dict[int, set[int]]:
 def correction_updates(uncorrect_updates: list[list[int]],
                        rules: dict[int, set[int]]
                        ) -> list[list[int]]:
+    """
+    Алгоритм: проходим по записи и каждому числу придаем вес - позицию
+    в правилной записи. Вес - сколько элеметов должно стоять перед ней.
+    """
     corrected = []
     for update in uncorrect_updates:
-        for pos, num in enumerate(update[: -1]):
-            flag = True
-            while flag:
-                for p, n in enumerate(update[pos + 1:]):
-                    if n in rules:
-                        update = [n, *update[:p], *update[p+1:]]
-                        flage = False
-        corrected.append(update)
+        positions = dict(zip(update, [0]*len(update)))
+        for pos, num in enumerate(update[:-1]):
+            right_elems = []
+            counter = 0
+            if num not in rules:
+                positions[num] = 0
+                for elem in update:
+                    if elem != num:
+                        positions[elem] += 1
+                continue
+            for elem in update[pos+1:]:
+                if elem in rules[num]:
+                    counter += 1
+                else:
+                    right_elems.append(elem)
+            positions[num] += counter
+            for elem in right_elems:
+                positions[elem] += counter + 1
+        correct_update = sorted(update, key = lambda x : positions[x])
+        corrected.append(correct_update)
     return corrected
 
 
-def main(data_file: str) -> int:
+def main(data_file: str) -> tuple[int, int]:
     row_rules, row_updates = parser_data(data_file)
     updates = transform_updates(row_updates)
     rules = finalize_rules(row_rules)
     correct_updates, uncorrect_updates = divide_updates(
             updates, rules)
-    corrected = correction_updates(uncorrect_updates)
-    return sum([x[len(x) // 2] for x in correct_updates])
+    corrected = correction_updates(uncorrect_updates, rules)
+    sum_of_correct = sum([x[len(x) // 2] for x in correct_updates])
+    sum_of_corrected = sum([x[len(x) // 2] for x in corrected])
+    return sum_of_correct, sum_of_corrected
+
 
 if __name__ == '__main__':
     res = main("input_data.txt")
