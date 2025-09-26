@@ -1,20 +1,26 @@
 import unittest
 
-from guard_in_room import data_preparation
+from guard_in_room import data_preparation, room_tour
 
 
 class TestGuardInRoom(unittest.TestCase):
-    def test_data_preparation(self):
-        data_struct = [
+    def setUp(self):
+        self.data_struct = [
             [0, 0, 1, 0, 0],
             [0, 0, 0, 0, 1],
             [0, 0, 0, 0, 0],
             [0, 0, 0, 1, 0],
         ]
-        init_pos = [2, 2]
+        self.init_pos = [2, 2]
+
+    def test_data_preparation(self):
         self.assertEqual(
-            data_preparation("data_preparation_test.txt"), (data_struct, init_pos)
+            data_preparation("data_preparation_test.txt"),
+            (self.data_struct, self.init_pos),
         )
+
+    def test_little_room_toor(self):
+        self.assertEqual(room_tour(self.data_struct, self.init_pos), 6)
 
 
 if __name__ == "__main__":
