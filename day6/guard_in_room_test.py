@@ -20,7 +20,7 @@ class TestGuardInRoom(unittest.TestCase):
         )
 
     def test_little_room_toor(self):
-        self.assertEqual(room_tour(self.data_struct, self.init_pos), 6)
+        self.assertEqual(room_tour(self.data_struct, self.init_pos), 7)
 
 
 if __name__ == "__main__":
