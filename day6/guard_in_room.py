@@ -3,14 +3,14 @@
 с подсчетом пройденных полей.
 Rule of motion: move while achieve "#" than turn right
 """
-
+from pprint import pprint
 from itertools import cycle
 
 
 def data_preparation(file_name: str) -> tuple[list[list[int]], list[int]]:
     with open(file_name) as f:
         struct_room = []
-        init_pos: list[int]
+        init_pos: list[int] #first - row(y), second - column(x)
         for y, line in enumerate(f):
             line = line.strip()
             struct_line = []
@@ -18,7 +18,7 @@ def data_preparation(file_name: str) -> tuple[list[list[int]], list[int]]:
                 if ch == "#":
                     struct_line.append(1)
                 elif ch == "^":
-                    init_pos = [x, y]
+                    init_pos = [y, x]
                     struct_line.append(0)
                 else:
                     struct_line.append(0)
@@ -33,20 +33,27 @@ def room_tour(room: list[list[int]], init_pos: list[int]) -> int:
     directions = cycle(["up", "right", "down", "left"])
     dir_rules = {"up": (-1, 0), "right": (0, 1), "down": (1, 0), "left": (0, -1)}
     dir = next(directions)
-    step_count = 0
-    while right_bound > pos["x"] >= 0 and down_bound >= pos["y"] >= 0:
+    visits = {(pos["y"], pos["x"])}
+    while True:
         step = dir_rules[dir]
         next_pos = (r + q for (r, q) in zip(pos.values(), step))
         np = dict(zip(("y", "x"), next_pos))
-        if room[np["y"]][np["x"]] == 1:
+        if np["x"] not in range(right_bound) or np["y"] not in range(down_bound):
+            break
+        elif room[np["y"]][np["x"]] == 1:
             dir = next(directions)
         else:
             pos = np
-            step_count += 1
-    return step_count
+            visits.add((np["y"],np["x"]))
+    pprint(visits)
+    return len(visits)
 
 
 def main(file_name: str) -> int:
     data, init_pos = data_preparation(file_name)
     res = room_tour(data, init_pos)
     return res
+
+if __name__ == '__main__':
+    res = main("data_input.txt")
+    print(res)
