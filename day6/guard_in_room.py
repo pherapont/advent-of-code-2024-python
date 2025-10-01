@@ -7,6 +7,9 @@ Rule of motion: move while achieve "#" than turn right
 from itertools import cycle
 from pprint import pprint
 
+dir_types = ["up", "right", "down", "left"]
+dir_rules = {"up": (-1, 0), "right": (0, 1), "down": (1, 0), "left": (0, -1)}
+
 
 def data_preparation(file_name: str) -> tuple[list[list[int]], list[int]]:
     with open(file_name) as f:
@@ -31,8 +34,7 @@ def room_tour(room: list[list[int]], init_pos: list[int]) -> int:
     right_bound = len(room[0])
     down_bound = len(room)
     pos = dict(zip(("y", "x"), init_pos))
-    directions = cycle(["up", "right", "down", "left"])
-    dir_rules = {"up": (-1, 0), "right": (0, 1), "down": (1, 0), "left": (0, -1)}
+    directions = cycle(dir_types)
     dir = next(directions)
     visits = {(pos["y"], pos["x"])}
     while True:
@@ -52,13 +54,37 @@ def room_tour(room: list[list[int]], init_pos: list[int]) -> int:
 
 def is_cycle(
     room: list[list[int]],
-    way: set[tuple[int, int]],
-    init_pos: list[int],
+    init_pos: tuple[int],
     obstruction: list[int],
 ) -> bool:
     # Проблема: в этой функции надо снова организовывать обход комнаты
     # можно попробывать выделить обход в отдельную функцию
-    check_points: list[tuple[int, int], str] = []
+    check_points: list[tuple[int, int, str]] = []
+    right_bound = len(room[0])
+    down_bound = len(room)
+    pos = dict(zip(("y", "x"), init_pos))
+    directions = cycle(dir_types)
+    dir = next(directions)
+    y_obs, x_obs = obstruction
+    room[y_obs][x_obs] = 1
+    res = False
+    while True:
+        step = dir_rules[dir]
+        next_pos = (r + q for (r, q) in zip(pos.values(), step))
+        np = dict(zip(("y", "x"), next_pos))
+        if np["x"] not in range(right_bound) or np["y"] not in range(down_bound):
+            break
+        elif room[np["y"]][np["x"]] == 1:
+            point = (*np, dir)
+            if point in check_points:
+                res = True
+                break
+            else:
+                check_points.append(point)
+                dir = next(directions)
+        else:
+            pos = np
+    return res
 
 
 def main(file_name: str) -> int:
