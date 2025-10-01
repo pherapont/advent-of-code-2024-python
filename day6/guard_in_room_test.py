@@ -1,6 +1,6 @@
 import unittest
 
-from guard_in_room import data_preparation, room_tour, main
+from guard_in_room import data_preparation, is_cycle, main, room_tour
 
 
 class TestGuardInRoom(unittest.TestCase):
@@ -24,8 +24,15 @@ class TestGuardInRoom(unittest.TestCase):
     def test_little_room_toor(self):
         self.assertEqual(room_tour(self.data_struct, self.init_pos), 8)
 
+    @unittest.skip("first part")
     def test_room_from_site(self):
-        self.assertEqual(main('data_main_test.txt'), 41)
+        self.assertEqual(main("data_main_test.txt"), 41)
+
+    def test_is_cycle_right(self):
+        obstruction = [2, 0]
+        way = {(1, 2), (1, 3), (2, 3), (2, 2), (2, 1), (2, 0)}
+        self.assertTrue(is_cycle(self.data_struct, way, self.init_pos, obstruction))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -3,14 +3,15 @@
 с подсчетом пройденных полей.
 Rule of motion: move while achieve "#" than turn right
 """
-from pprint import pprint
+
 from itertools import cycle
+from pprint import pprint
 
 
 def data_preparation(file_name: str) -> tuple[list[list[int]], list[int]]:
     with open(file_name) as f:
         struct_room = []
-        init_pos: list[int] #first - row(y), second - column(x)
+        init_pos: list[int]  # first - row(y), second - column(x)
         for y, line in enumerate(f):
             line = line.strip()
             struct_line = []
@@ -44,9 +45,20 @@ def room_tour(room: list[list[int]], init_pos: list[int]) -> int:
             dir = next(directions)
         else:
             pos = np
-            visits.add((np["y"],np["x"]))
+            visits.add((np["y"], np["x"]))
     pprint(visits)
     return len(visits)
+
+
+def is_cycle(
+    room: list[list[int]],
+    way: set[tuple[int, int]],
+    init_pos: list[int],
+    obstruction: list[int],
+) -> bool:
+    # Проблема: в этой функции надо снова организовывать обход комнаты
+    # можно попробывать выделить обход в отдельную функцию
+    check_points: list[tuple[int, int], str] = []
 
 
 def main(file_name: str) -> int:
@@ -54,6 +66,7 @@ def main(file_name: str) -> int:
     res = room_tour(data, init_pos)
     return res
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     res = main("data_input.txt")
     print(res)
