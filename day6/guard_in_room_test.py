@@ -1,6 +1,6 @@
 import unittest
 
-from guard_in_room import data_preparation, is_cycle, main, room_tour
+from guard_in_room import data_preparation, find_all_cycles, is_cycle, main, room_tour
 
 
 class TestGuardInRoom(unittest.TestCase):
@@ -31,22 +31,25 @@ class TestGuardInRoom(unittest.TestCase):
     @unittest.skip("one cycle")
     def test_is_cycle_right(self):
         obstruction = [2, 0]
-        way = {(1, 2), (1, 3), (2, 3), (2, 2), (2, 1), (2, 0)}
         self.assertTrue(is_cycle(self.data_struct, self.init_pos, obstruction))
 
     @unittest.skip("one cycle")
     def test_is_cycle_wrong(self):
         obstruction = [2, 2]
-        way = {(1, 2), (1, 3), (2, 3), (2, 2), (2, 1), (2, 0)}
         self.assertFalse(is_cycle(self.data_struct, self.init_pos, obstruction))
 
+    @unittest.skip("prepare")
     def test_all_points_for_cycle(self):
         visites = {(1, 2), (1, 3), (2, 3), (2, 2), (2, 1), (2, 0)}
         count_cycles = 0
         visites.discard(self.init_pos)
         for point in visites:
-            count_cycles += is_cycle(self.data_struct, self.init_pos, point)
+            res = is_cycle(self.data_struct, self.init_pos, point)
+            count_cycles += res
         self.assertEqual(count_cycles, 1)
+
+    def test_cycles_in_room_from_site(self):
+        self.assertEqual(find_all_cycles("data_main_test.txt"), 6)
 
 
 if __name__ == "__main__":

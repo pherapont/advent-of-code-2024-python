@@ -5,16 +5,15 @@ Rule of motion: move while achieve "#" than turn right
 """
 
 from itertools import cycle
-from pprint import pprint
 
 dir_types = ["up", "right", "down", "left"]
 dir_rules = {"up": (-1, 0), "right": (0, 1), "down": (1, 0), "left": (0, -1)}
 
 
-def data_preparation(file_name: str) -> tuple[list[list[int]], list[int]]:
+def data_preparation(file_name: str) -> tuple[list[list[int]], tuple[int]]:
     with open(file_name) as f:
         struct_room = []
-        init_pos: list[int]  # first - row(y), second - column(x)
+        init_pos: tuple[int]  # first - row(y), second - column(x)
         for y, line in enumerate(f):
             line = line.strip()
             struct_line = []
@@ -22,7 +21,7 @@ def data_preparation(file_name: str) -> tuple[list[list[int]], list[int]]:
                 if ch == "#":
                     struct_line.append(1)
                 elif ch == "^":
-                    init_pos = [y, x]
+                    init_pos = (y, x)
                     struct_line.append(0)
                 else:
                     struct_line.append(0)
@@ -30,7 +29,7 @@ def data_preparation(file_name: str) -> tuple[list[list[int]], list[int]]:
     return struct_room, init_pos
 
 
-def room_tour(room: list[list[int]], init_pos: list[int]) -> int:
+def room_tour(room: list[list[int]], init_pos: list[int]) -> set[tuple[int]]:
     right_bound = len(room[0])
     down_bound = len(room)
     pos = dict(zip(("y", "x"), init_pos))
@@ -48,8 +47,7 @@ def room_tour(room: list[list[int]], init_pos: list[int]) -> int:
         else:
             pos = np
             visits.add((np["y"], np["x"]))
-    pprint(visits)
-    return len(visits)
+    return visits
 
 
 def is_cycle(
@@ -57,8 +55,6 @@ def is_cycle(
     init_pos: tuple[int],
     obstruction: list[int],
 ) -> bool:
-    # Проблема: в этой функции надо снова организовывать обход комнаты
-    # можно попробывать выделить обход в отдельную функцию
     check_points: list[tuple[int, int, str]] = []
     right_bound = len(room[0])
     down_bound = len(room)
@@ -75,7 +71,7 @@ def is_cycle(
         if np["x"] not in range(right_bound) or np["y"] not in range(down_bound):
             break
         elif room[np["y"]][np["x"]] == 1:
-            point = (*np, dir)
+            point = (np["y"], np["x"], dir)
             if point in check_points:
                 res = True
                 break
@@ -84,15 +80,27 @@ def is_cycle(
                 dir = next(directions)
         else:
             pos = np
+    room[y_obs][x_obs] = 0
     return res
+
+
+def find_all_cycles(file_name: str) -> int:
+    data, init_pos = data_preparation(file_name)
+    visites = room_tour(data, init_pos)
+    visites.discard(init_pos)
+    count_cycles = 0
+    for point in visites:
+        res = is_cycle(data, init_pos, point)
+        count_cycles += res
+    return count_cycles
 
 
 def main(file_name: str) -> int:
     data, init_pos = data_preparation(file_name)
     res = room_tour(data, init_pos)
-    return res
+    return len(res)
 
 
 if __name__ == "__main__":
-    res = main("data_input.txt")
+    res = find_all_cycles("data_input.txt")
     print(res)
