@@ -9,6 +9,10 @@ class TestCalibratons(unittest.TestCase):
         res = 21
         self.assertTrue(check_calibration(nums, res))
 
+    def test_check_false_calibration(self):
+        nums = (2, 5, 11)
+        res = 20
+        self.assertFalse(check_calibration(nums, res))
 
 if __name__ == "__main__":
     unittest.main()
