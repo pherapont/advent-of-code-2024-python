@@ -27,8 +27,12 @@ def check_calibration(nums: list[int], res: int) -> bool:
                 expressions.append(unit)
     check = False
     for exp in expressions:
-        token = "".join(exp)
-        tr = eval(token)
+        while len(exp) > 1:
+            head = exp[:3]
+            tail = exp[3:]
+            ans = eval("".join(head))
+            exp = [str(ans), *tail]
+        tr = int(exp[0])
         if tr == res:
             check = True
     return check
@@ -44,5 +48,5 @@ def main(file_name: str) -> int:
 
 
 if __name__ == "__main__":
-    res = parse_data("data_main_test.py")
-    pprint(res)
+    res = main("data_input.txt")
+    print(res)
