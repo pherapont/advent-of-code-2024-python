@@ -1,35 +1,32 @@
 from copy import deepcopy
-from pprint import pprint
-
-# TODO test for parse_data()
 
 
-def parse_data(file_name:str) -> list[tuple[int, list[int]]]:
+def parse_data(file_name:str) -> list[tuple[str, list[str]]]:
     parsed = [] 
     with open(file_name) as f:
         for line in f:
             result, data = line.split(":")
             data_to_arr = data.split()
-            parsed.append((int(result.strip()), data_to_arr))
+            parsed.append((result.strip(), data_to_arr))
     return parsed
 
 
-def create_token_tree(nums: list[int], operators: tuple[str]
+def create_token_tree(nums: list[str], operators: tuple[str]
                       ) -> list[list[str]]:
     if len(nums) == 0: return False
-    expressions = [ [str(nums[0])], ]
+    expressions = [ [nums[0]], ]
     for n in nums[1:]:
         tmp = deepcopy(expressions)
         expressions = []
         for item in tmp:
             for op in operators:
-                unit = [*item, op, str(n)]
+                unit = [*item, op, n]
                 expressions.append(unit)
     return expressions
 
 
 
-def check_calibration(expressions: list[list[int]], res: int) -> bool:
+def check_calibration(expressions: list[list[str]], res: str) -> bool:
     check = False
     for exp in expressions:
         while len(exp) > 1:
@@ -37,7 +34,7 @@ def check_calibration(expressions: list[list[int]], res: int) -> bool:
             tail = exp[3:]
             ans = eval("".join(head))
             exp = [str(ans), *tail]
-        tr = int(exp[0])
+        tr = exp[0]
         if tr == res:
             check = True
     return check
@@ -49,8 +46,8 @@ def main(file_name: str) -> int:
     data = parse_data(file_name)
     for res, token in data:
         tree = create_token_tree(token, operators)
-        if check_calibration(tree, int(res)):
-            total += res
+        if check_calibration(tree, res):
+            total += int(res)
     return total
 
 
