@@ -14,10 +14,10 @@ def parse_data(file_name:str) -> list[tuple[int, list[int]]]:
     return parsed
 
 
-def check_calibration(nums: list[int], res: int) -> bool:
+def create_token_tree(nums: list[int], operators: tuple[str]
+                      ) -> list[list[str]]:
     if len(nums) == 0: return False
     expressions = [ [str(nums[0])], ]
-    operators = ("+", "*")
     for n in nums[1:]:
         tmp = deepcopy(expressions)
         expressions = []
@@ -25,6 +25,11 @@ def check_calibration(nums: list[int], res: int) -> bool:
             for op in operators:
                 unit = [*item, op, str(n)]
                 expressions.append(unit)
+    return expressions
+
+
+
+def check_calibration(expressions: list[list[int]], res: int) -> bool:
     check = False
     for exp in expressions:
         while len(exp) > 1:
@@ -39,10 +44,12 @@ def check_calibration(nums: list[int], res: int) -> bool:
 
 
 def main(file_name: str) -> int:
+    operators = ("+", "*")
     total = 0
     data = parse_data(file_name)
     for res, token in data:
-        if check_calibration(token, int(res)):
+        tree = create_token_tree(token, operators)
+        if check_calibration(tree, int(res)):
             total += res
     return total
 
