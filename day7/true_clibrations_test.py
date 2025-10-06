@@ -18,7 +18,7 @@ class TestCalibratons(unittest.TestCase):
         self.assertFalse(check_calibration(self.tree, res))
 
     def test_data_from_site(self):
-        self.assertEqual(main("data_main_test.py"), 3749)
+        self.assertEqual(main("data_main_test.py"), 11387)
 
 if __name__ == "__main__":
     unittest.main()

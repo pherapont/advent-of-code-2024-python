@@ -32,8 +32,12 @@ def check_calibration(expressions: list[list[str]], res: str) -> bool:
         while len(exp) > 1:
             head = exp[:3]
             tail = exp[3:]
-            ans = eval("".join(head))
-            exp = [str(ans), *tail]
+            if head[1] == "||":
+                ans = head[0] + head[2]
+                exp = [ans, *tail]
+            else:
+                ans = eval("".join(head))
+                exp = [str(ans), *tail]
         tr = exp[0]
         if tr == res:
             check = True
@@ -41,10 +45,13 @@ def check_calibration(expressions: list[list[str]], res: str) -> bool:
 
 
 def main(file_name: str) -> int:
-    operators = ("+", "*")
+    operators = ("+", "*", "||")
     total = 0
     data = parse_data(file_name)
+    n = 1
     for res, token in data:
+        print(f"Line {n}")
+        n += 1
         tree = create_token_tree(token, operators)
         if check_calibration(tree, res):
             total += int(res)
