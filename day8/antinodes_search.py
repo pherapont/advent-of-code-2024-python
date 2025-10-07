@@ -1,6 +1,9 @@
 from pprint import pprint
 
 
+# TODO: доработать функцию для вызова search_antinodes
+# TODO: добавить функцию сканирования файла данных
+
 def check_nodes(map: list[list[str]]) -> int:
     res: set[list[int]] = {}
     node: str = ""
@@ -16,8 +19,8 @@ def check_nodes(map: list[list[str]]) -> int:
                 current_nodes.append((y, x))
 
 
-def search_antinodes(nodes: list[tuple[int]], field_size: tuple[int]) -> list[tuple[int]]:
-    antinodes: list[tuple[int]] = []
+def search_antinodes(nodes: list[tuple[int]], field_size: tuple[int]) -> set[tuple[int]]:
+    antinodes: set[tuple[int]] = set()
     while len(nodes) > 1:
         chief = nodes.pop(0)
         for node in nodes:
@@ -33,6 +36,6 @@ def search_antinodes(nodes: list[tuple[int]], field_size: tuple[int]) -> list[tu
                 if (an0 in range(field_size[0]) and
                         an1 in range(field_size[1])):
                     antinode = (an0, an1)
-                    antinodes.append(antinode)
+                    antinodes.add(antinode)
     pprint(antinodes)
     return antinodes
