@@ -1,3 +1,5 @@
+#TODO дополнительные тесты для разных случаев antinodes
+
 import unittest
 
 from antinodes_search import check_nodes, search_antinodes
