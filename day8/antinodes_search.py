@@ -21,18 +21,17 @@ def search_antinodes(
             diff_negative = [x[0] - x[1] for x in zip(chief, node)]
             # antinode1 = chief + diff_negative
             # antinode2 = node + diff_negative
-            # TODO: до этого места код правильный, дальше обновить методику расчета
-            # NOTE: надо найти всю диагональ с данным шагом
-            ans = (
-                [sum(x) for x in zip(chief, diff_negative)],
-                [sum(x) for x in zip(node, diff_positive)],
-            )
-            for an in ans:
-                an0 = int(an[0])
-                an1 = int(an[1])
-                if an0 in range(field_size[0]) and an1 in range(field_size[1]):
-                    antinode = (an0, an1)
-                    antinodes.add(antinode)
+            while chief[0] in range(field_size[0]) and chief[1] in range(field_size[1]):
+                antinode = (chief[0], chief[1])
+                antinodes.add(antinode)
+                tmp = [sum(x) for x in zip(chief, diff_negative)]
+                chief = tmp
+            while node[0] in range(field_size[0]) and node[1] in range(field_size[1]):
+                antinode = (node[0], node[1])
+                antinodes.add(antinode)
+                tmp = [sum(x) for x in zip(node, diff_positive)]
+                node = tmp
+    print(antinodes)
     return antinodes
 
 
