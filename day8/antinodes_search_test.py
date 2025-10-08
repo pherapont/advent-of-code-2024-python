@@ -1,18 +1,19 @@
 import unittest
-from antinodes_search import check_nodes, search_antinodes
+
+from antinodes_search import get_nodes_coordinates, main, search_antinodes
 
 
 class AntinodesTest(unittest.TestCase):
-    @unittest.skip("later")
-    def test_check_simple_nodes(self):
+    def test_get_nodes_coordinates(self):
         map = [
             [".", ".", ".", "."],
             [".", "0", ".", "."],
-            [".", ".", "0", "."],
-            [".", ".", ".", "."],
+            ["a", ".", "0", "."],
+            [".", "a", ".", "."],
         ]
-        res = {[0, 0], [3, 3]}
-        self.assertEqual(check_nodes(map), res)
+        node = "0"
+        res = [(1, 1), (2, 2)]
+        self.assertEqual(get_nodes_coordinates(map, node), res)
 
     def test_search_simple_antinodes(self):
         nodes = [(1, 1), (2, 2)]
@@ -37,6 +38,11 @@ class AntinodesTest(unittest.TestCase):
         field_size = (9, 9)
         res = {(1, 3), (2, 0), (6, 2), (7, 6)}
         self.assertEqual(search_antinodes(nodes, field_size), res)
+
+    def test_data_first_test(self):
+        res = 14
+        self.assertEqual(main("data_first_test.txt"), res)
+
 
 if __name__ == "__main__":
     unittest.main()
