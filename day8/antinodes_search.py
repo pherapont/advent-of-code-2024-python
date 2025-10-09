@@ -1,6 +1,3 @@
-from pprint import pprint
-
-
 def get_nodes_coordinates(map: list[list[str]], node: str) -> list[tuple[int]]:
     res: list[tuple[int]] = []
     for nline, line in enumerate(map):
@@ -21,17 +18,22 @@ def search_antinodes(
             diff_negative = [x[0] - x[1] for x in zip(chief, node)]
             # antinode1 = chief + diff_negative
             # antinode2 = node + diff_negative
-            while chief[0] in range(field_size[0]) and chief[1] in range(field_size[1]):
-                antinode = (chief[0], chief[1])
+            node_clone = [i for i in node]
+            chief_clone = [i for i in chief]
+            while chief_clone[0] in range(field_size[0]) and chief_clone[1] in range(
+                field_size[1]
+            ):
+                antinode = (chief_clone[0], chief_clone[1])
                 antinodes.add(antinode)
-                tmp = [sum(x) for x in zip(chief, diff_negative)]
-                chief = tmp
-            while node[0] in range(field_size[0]) and node[1] in range(field_size[1]):
-                antinode = (node[0], node[1])
+                tmp = [sum(x) for x in zip(chief_clone, diff_negative)]
+                chief_clone = tmp
+            while node_clone[0] in range(field_size[0]) and node_clone[1] in range(
+                field_size[1]
+            ):
+                antinode = (node_clone[0], node_clone[1])
                 antinodes.add(antinode)
-                tmp = [sum(x) for x in zip(node, diff_positive)]
-                node = tmp
-    print(antinodes)
+                tmp = [sum(x) for x in zip(node_clone, diff_positive)]
+                node_clone = tmp
     return antinodes
 
 
@@ -62,4 +64,4 @@ def main(file_name: str) -> int:
 
 if __name__ == "__main__":
     res = main("data_main_test.txt")
-    pprint(res)
+    print(res)
