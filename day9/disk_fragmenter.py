@@ -38,4 +38,16 @@ def defragment_disk(disk_map_data: tuple[int]) -> tuple[int]:
             continue
     return tuple(disk_map[:direct_counter])
 
-    return ()
+
+def get_check_sum(disk: tuple[int]) -> int:
+    res = 0
+    for pos, block_id in enumerate(disk):
+        res += pos * block_id
+    return res
+
+
+def main(file_name: str) -> int:
+    data = get_data_from_file(file_name)
+    d_m = get_disk_map(data)
+    d_d = defragment_disk(d_m)
+    return get_check_sum(d_d)
