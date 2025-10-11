@@ -30,19 +30,38 @@ def defragment_disk(disk_map_data: tuple[int]) -> tuple[int]:
                 cursor_back -= 1
             else:
                 disk_map[cursor] = disk_map[cursor_back]
+                disk_map[cursor_back] = -1
                 cursor_back -= 1
                 if cursor < cursor_back:
                     cursor += 1
         else:
             cursor += 1
             continue
-    res = disk_map[:cursor] if disk_map[cursor] == -1 else disk_map[: cursor + 1]
-    return tuple(res)
+    return tuple(disk_map)
+
+
+def defragment_disk_by_files(disk_data: tuple[int]) -> tuple[int]:
+    df = {'length': 0, 'elem': -1}
+    disk_map = list(disk_data)
+    cursor = 0
+    cursor_back = len(disk_map) - 1
+#TODO: сканируем файл и ищем свободное место для вставки
+    while cursor < cursor_back:
+        elem = disk_map[cursor_back]
+        if elem != -1:
+            df.elem = disk_map[cursor_back]
+            while disk_map[cursor_back] == elem:
+                df.length += 1
+                cursor_back -= 1
+            cursor_back -= 1
+    return ()
 
 
 def get_check_sum(disk: tuple[int]) -> int:
     res = 0
     for pos, block_id in enumerate(disk):
+        if block_id == -1:
+            continue
         res += pos * block_id
     return res
 
