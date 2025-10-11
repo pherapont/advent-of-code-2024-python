@@ -26,19 +26,17 @@ def defragment_disk(disk_map_data: tuple[int]) -> tuple[int]:
     cursor_back = len(disk_map) - 1
     while cursor < cursor_back:
         if disk_map[cursor] == -1:
-            while disk_map[cursor_back] == -1:
+            if disk_map[cursor_back] == -1:
                 cursor_back -= 1
-                continue
             else:
                 disk_map[cursor] = disk_map[cursor_back]
-                disk_map[cursor_back] = -1
                 cursor_back -= 1
                 if cursor < cursor_back:
                     cursor += 1
         else:
             cursor += 1
             continue
-    res = disk_map[:cursor] if disk_map[cursor] == -1 else disk_map[:cursor + 1]
+    res = disk_map[:cursor] if disk_map[cursor] == -1 else disk_map[: cursor + 1]
     return tuple(res)
 
 
@@ -54,6 +52,7 @@ def main(file_name: str) -> int:
     d_m = get_disk_map(data)
     d_d = defragment_disk(d_m)
     return get_check_sum(d_d)
+
 
 if __name__ == "__main__":
     res = main("data_main_input.txt")
