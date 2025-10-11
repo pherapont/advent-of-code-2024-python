@@ -16,27 +16,30 @@ def get_disk_map(disk_desc: tuple[int]) -> tuple[int]:
             if i % 2:
                 disk_map.append(gap_id)
             else:
-                disk_map.append(i / 2)
+                disk_map.append(i // 2)
     return tuple(disk_map)
 
 
 def defragment_disk(disk_map_data: tuple[int]) -> tuple[int]:
     disk_map = list(disk_map_data)
-    direct_counter = 0
-    back_counter = len(disk_map) - 1
-    while direct_counter != back_counter:
-        if disk_map[direct_counter] == -1:
-            if disk_map[back_counter] == -1:
-                back_counter -= 1
+    cursor = 0
+    cursor_back = len(disk_map) - 1
+    while cursor < cursor_back:
+        if disk_map[cursor] == -1:
+            while disk_map[cursor_back] == -1:
+                cursor_back -= 1
                 continue
             else:
-                disk_map[direct_counter] = disk_map[back_counter]
-                back_counter -= 1
-                direct_counter += 1
+                disk_map[cursor] = disk_map[cursor_back]
+                disk_map[cursor_back] = -1
+                cursor_back -= 1
+                if cursor < cursor_back:
+                    cursor += 1
         else:
-            direct_counter += 1
+            cursor += 1
             continue
-    return tuple(disk_map[:direct_counter])
+    res = disk_map[:cursor] if disk_map[cursor] == -1 else disk_map[:cursor + 1]
+    return tuple(res)
 
 
 def get_check_sum(disk: tuple[int]) -> int:
@@ -51,3 +54,7 @@ def main(file_name: str) -> int:
     d_m = get_disk_map(data)
     d_d = defragment_disk(d_m)
     return get_check_sum(d_d)
+
+if __name__ == "__main__":
+    res = main("data_main_input.txt")
+    print(res)
