@@ -1,3 +1,7 @@
+from pprint import pprint
+from collections import namedtuple
+
+
 def get_data_from_file(file_name: str) -> tuple[int]:
     data = []
     data_str: str
@@ -6,6 +10,20 @@ def get_data_from_file(file_name: str) -> tuple[int]:
     for i in data_str.strip():
         data.append(int(i))
     return tuple(data)
+
+
+def get_disk_structure(
+        disk_desc: tuple[int]) -> tuple[tuple[str, int]]:
+    DiskElem = namedtuple("DiskElem", ["elem_type", "elem_size"])
+    row_disk_structure = []
+    for index, elem in enumerate(disk_desc):
+        d_e: DiskElem
+        if index % 2:
+            d_e = DiskElem(elem_type="gap", elem_size=elem)
+        else:
+            d_e = DiskElem(elem_type="rec", elem_size=elem)
+        row_disk_structure.append(d_e)
+    return tuple(row_disk_structure)
 
 
 def get_disk_map(disk_desc: tuple[int]) -> tuple[int]:
@@ -74,5 +92,6 @@ def main(file_name: str) -> int:
 
 
 if __name__ == "__main__":
-    res = main("data_main_input.txt")
-    print(res)
+    disk_desc = (1, 2, 3, 4, 5)
+    res = get_disk_structure(disk_desc)
+    pprint(res)
