@@ -1,7 +1,7 @@
 from pprint import pprint
 from collections import namedtuple
 
-DiskElem = namedtuple("DiskElem", ["elem_type", "elem_size"])
+DiskElem = namedtuple("DiskElem", ["elems", "gap_size"])
 
 def get_data_from_file(file_name: str) -> tuple[int]:
     data = []
@@ -20,26 +20,31 @@ def get_disk_structure(
     for index, elem in enumerate(disk_desc):
         d_e: DiskElem
         if index % 2:
-            d_e = DiskElem(elem_type="gap", elem_size=elem)
+            d_e = DiskElem(elems=[], gap_size=elem)
         else:
-            d_e = DiskElem(elem_type="rec", elem_size=elem)
+            # elements pack in list of tuple(id, size)
+            d_e = DiskElem(elems=[(index//2, elem)], gap_size=0)
         row_disk_structure.append(d_e)
     return tuple(row_disk_structure)
 
 
-def defragment_disk_by_files(disk_structure: tuple[tuple[int]]) -> tuple[tuple[int]]:
-    cright = len(disk_structure) - 1  # cursor right
-    for i in range(cright, 0, -1):
-        dsi = disk_structure[i]
-        if dsi.elem_type == "gap":
+def defragment_disk_by_files(
+        disk_structure: tuple[tuple[int]]
+            ) -> tuple[tuple[int]]:
+    dds = list(disk_structure)  #disk defragment structure
+    for i in range(len(disk_structure) - 1, 0, -1):
+        if not dds[i].elems:
             continue
         else:
             for j in range(len(disk_structure)):
-                dsj = disk_structure[j]
-                if dsj.elem_type == "gap" and dsj.elem_size >= dsi.elem_size:
-                    new_file = ()
-                    #TODO: continue
-    return ()
+                if(dds[j].gap_size >= dds[i].elems[0][1]):
+                    dds[j].elems.append(dds[i].elems[0])
+#BUG:  Принципиальная ошибка - нельзя менять содержимое tuple
+#NOTE:  Надо возвращаться к идеи добавления в список новых tuples
+#NOTE:  и. соответственно к insert хотя это и не эффективно
+                    dds[i].gap_size += dds[i].elems[0][1]
+                    del(dds[i].elems[0])
+    return dds
 
 
 def get_disk_map(disk_desc: tuple[int]) -> tuple[int]:
@@ -93,4 +98,8 @@ def main(file_name: str) -> int:
 if __name__ == "__main__":
     disk_desc = (1, 2, 3, 4, 5)
     res = get_disk_structure(disk_desc)
+    dds = defragment_disk_by_files(res)
+    print("----------RES---------")
     pprint(res)
+    print("----------DDS---------")
+    pprint(dds)
