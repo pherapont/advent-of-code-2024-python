@@ -1,6 +1,7 @@
 from pprint import pprint
 from collections import namedtuple
 
+DiskElem = namedtuple("DiskElem", ["elem_type", "elem_size"])
 
 def get_data_from_file(file_name: str) -> tuple[int]:
     data = []
@@ -13,8 +14,8 @@ def get_data_from_file(file_name: str) -> tuple[int]:
 
 
 def get_disk_structure(
-        disk_desc: tuple[int]) -> tuple[tuple[str, int]]:
-    DiskElem = namedtuple("DiskElem", ["elem_type", "elem_size"])
+        disk_desc: tuple[int]
+            ) -> tuple[tuple[str, int]]:
     row_disk_structure = []
     for index, elem in enumerate(disk_desc):
         d_e: DiskElem
@@ -24,6 +25,21 @@ def get_disk_structure(
             d_e = DiskElem(elem_type="rec", elem_size=elem)
         row_disk_structure.append(d_e)
     return tuple(row_disk_structure)
+
+
+def defragment_disk_by_files(disk_structure: tuple[tuple[int]]) -> tuple[tuple[int]]:
+    cright = len(disk_structure) - 1  # cursor right
+    for i in range(cright, 0, -1):
+        dsi = disk_structure[i]
+        if dsi.elem_type == "gap":
+            continue
+        else:
+            for j in range(len(disk_structure)):
+                dsj = disk_structure[j]
+                if dsj.elem_type == "gap" and dsj.elem_size >= dsi.elem_size:
+                    new_file = ()
+                    #TODO: continue
+    return ()
 
 
 def get_disk_map(disk_desc: tuple[int]) -> tuple[int]:
@@ -56,23 +72,6 @@ def defragment_disk(disk_map_data: tuple[int]) -> tuple[int]:
             cursor += 1
             continue
     return tuple(disk_map)
-
-
-def defragment_disk_by_files(disk_data: tuple[int]) -> tuple[int]:
-    df = {'length': 0, 'elem': -1}
-    disk_map = list(disk_data)
-    cursor = 0
-    cursor_back = len(disk_map) - 1
-#TODO: сканируем файл и ищем свободное место для вставки
-    while cursor < cursor_back:
-        elem = disk_map[cursor_back]
-        if elem != -1:
-            df.elem = disk_map[cursor_back]
-            while disk_map[cursor_back] == elem:
-                df.length += 1
-                cursor_back -= 1
-            cursor_back -= 1
-    return ()
 
 
 def get_check_sum(disk: tuple[int]) -> int:
