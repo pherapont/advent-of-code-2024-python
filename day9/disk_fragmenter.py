@@ -28,6 +28,7 @@ def get_disk_structure(
     return tuple(row_disk_structure)
 
 
+#TODO: освоить дебаггер для python
 def defragment_disk_by_files(
         disk_structure: tuple[tuple[int]]
             ) -> tuple[tuple[int]]:
@@ -37,13 +38,15 @@ def defragment_disk_by_files(
             continue
         else:
             for j in range(len(disk_structure)):
+                print(dds[i].elems)
                 if(dds[j].gap_size >= dds[i].elems[0][1]):
-                    dds[j].elems.append(dds[i].elems[0])
-#BUG:  Принципиальная ошибка - нельзя менять содержимое tuple
-#NOTE:  Надо возвращаться к идеи добавления в список новых tuples
-#NOTE:  и. соответственно к insert хотя это и не эффективно
-                    dds[i].gap_size += dds[i].elems[0][1]
-                    del(dds[i].elems[0])
+                    new_el = dds[j].elems.append(dds[i].elems[0])
+                    l_gap = dds[j].gap_size - dds[i].elems[0][1]
+                    r_gap = dds[i].gap_size + dds[i].elems[0][1] 
+                    r_el = dds[i].elems[1:]
+                    dds[j] = DiskElem(elems=new_el, gap_size=l_gap)
+                    dds[i] = DiskElem(elems=r_el, gap_size=r_gap)
+                    break
     return dds
 
 
