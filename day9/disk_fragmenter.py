@@ -1,7 +1,7 @@
 from pprint import pprint
 from collections import namedtuple
 
-DiskElem = namedtuple("DiskElem", ["elems", "gap_size"])
+DiskElem = namedtuple("DiskElem", ["eid", "esize"])
 
 def get_data_from_file(file_name: str) -> tuple[int]:
     data = []
@@ -15,39 +15,34 @@ def get_data_from_file(file_name: str) -> tuple[int]:
 
 def get_disk_structure(
         disk_desc: tuple[int]
-            ) -> tuple[tuple[str, int]]:
-    row_disk_structure = []
+            ) -> list[dict[str, int]]:
+    disk_structure = []
     for index, elem in enumerate(disk_desc):
-        d_e: DiskElem
         if index % 2:
-            d_e = DiskElem(elems=[], gap_size=elem)
+            print(f"{elem=}")
+            field = {"gap": elem, "el": 0, "elems": []}
+            disk_structure.append(field)
         else:
-            # elements pack in list of tuple(id, size)
-            d_e = DiskElem(elems=[(index//2, elem)], gap_size=0)
-        row_disk_structure.append(d_e)
-    return tuple(row_disk_structure)
+            d_e = DiskElem(eid=index // 2, esize=elem)
+            field = {"gap": 0, "el": elem, "elems": [d_e]}
+            disk_structure.append(field)
+    return disk_structure
 
 
 #TODO: освоить дебаггер для python
 def defragment_disk_by_files(
-        disk_structure: tuple[tuple[int]]
-            ) -> tuple[tuple[int]]:
-    dds = list(disk_structure)  #disk defragment structure
-    for i in range(len(disk_structure) - 1, 0, -1):
-        if not dds[i].elems:
-            continue
-        else:
-            for j in range(len(disk_structure)):
-                print(dds[i].elems)
-                if(dds[j].gap_size >= dds[i].elems[0][1]):
-                    new_el = dds[j].elems.append(dds[i].elems[0])
-                    l_gap = dds[j].gap_size - dds[i].elems[0][1]
-                    r_gap = dds[i].gap_size + dds[i].elems[0][1] 
-                    r_el = dds[i].elems[1:]
-                    dds[j] = DiskElem(elems=new_el, gap_size=l_gap)
-                    dds[i] = DiskElem(elems=r_el, gap_size=r_gap)
+        dstruct: list[dict[str, int]]
+            ) -> list[dict[str, int]]:
+    for i in range(len(dstruct) - 1, 0, -1):
+        if dstruct[i]["el"]:
+            for j in range(i):
+                if(dstruct[j]["gap"] >= dstruct[i]["el"]):
+                    dstruct[j]["gap"] -= dstruct[i]["el"]
+                    dstruct[j]["elems"].append(dstruct[i]["elems"].pop(0))
                     break
-    return dds
+        else:
+            continue
+    return dstruct
 
 
 def get_disk_map(disk_desc: tuple[int]) -> tuple[int]:
@@ -99,10 +94,10 @@ def main(file_name: str) -> int:
 
 
 if __name__ == "__main__":
-    disk_desc = (1, 2, 3, 4, 5)
+    disk_desc = (2, 4, 1, 3, 2, 5, 3)
     res = get_disk_structure(disk_desc)
-    dds = defragment_disk_by_files(res)
+    dstruct = defragment_disk_by_files(res)
     print("----------RES---------")
     pprint(res)
-    print("----------DDS---------")
-    pprint(dds)
+    print("----------dstruct---------")
+    pprint(dstruct)
