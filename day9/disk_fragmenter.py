@@ -19,7 +19,6 @@ def get_disk_structure(
     disk_structure = []
     for index, elem in enumerate(disk_desc):
         if index % 2:
-            print(f"{elem=}")
             field = {"gap": elem, "el": 0, "elems": []}
             disk_structure.append(field)
         else:
@@ -28,16 +27,20 @@ def get_disk_structure(
             disk_structure.append(field)
     return disk_structure
 
+#Todo похоже функция пошла по второму кругу
+# vscode не дает напечатать о большое - выкидывает в outline
 
-#TODO: освоить дебаггер для python
 def defragment_disk_by_files(
         dstruct: list[dict[str, int]]
             ) -> list[dict[str, int]]:
     for i in range(len(dstruct) - 1, 0, -1):
-        if dstruct[i]["el"]:
+        if ds_el := dstruct[i]["el"]:
             for j in range(i):
-                if(dstruct[j]["gap"] >= dstruct[i]["el"]):
-                    dstruct[j]["gap"] -= dstruct[i]["el"]
+                if dstruct[j]["gap"] >= ds_el:
+                    dstruct[j]["gap"] -= ds_el
+                    dstruct[j]["el"] += ds_el
+                    dstruct[i]["gap"] += ds_el
+                    dstruct[i]["el"] -= ds_el
                     dstruct[j]["elems"].append(dstruct[i]["elems"].pop(0))
                     break
         else:
@@ -97,7 +100,5 @@ if __name__ == "__main__":
     disk_desc = (2, 4, 1, 3, 2, 5, 3)
     res = get_disk_structure(disk_desc)
     dstruct = defragment_disk_by_files(res)
-    print("----------RES---------")
-    pprint(res)
     print("----------dstruct---------")
     pprint(dstruct)
