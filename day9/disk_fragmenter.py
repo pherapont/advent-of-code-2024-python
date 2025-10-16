@@ -27,8 +27,6 @@ def get_disk_structure(
             disk_structure.append(field)
     return disk_structure
 
-#Todo похоже функция пошла по второму кругу
-# vscode не дает напечатать о большое - выкидывает в outline
 
 def defragment_disk_by_files(
         dstruct: list[dict[str, int]]
@@ -46,6 +44,22 @@ def defragment_disk_by_files(
         else:
             continue
     return dstruct
+
+
+def file_map(defr_disk: list[dict[str, int]]) -> tuple[int]:
+    disk_map: list[int] = []
+    gap_id = -1
+    for block in defr_disk:
+        if block["el"]:
+            for el in block["elems"]:
+                for i in range(el.esize):
+                    disk_map.append(el.eid)
+            for j in range(block["gap"]):
+                disk_map.append(-1)
+        else:
+            for j in range(block["gap"]):
+                disk_map.append(-1)
+    return tuple(disk_map)
 
 
 def get_disk_map(disk_desc: tuple[int]) -> tuple[int]:
@@ -91,14 +105,12 @@ def get_check_sum(disk: tuple[int]) -> int:
 
 def main(file_name: str) -> int:
     data = get_data_from_file(file_name)
-    d_m = get_disk_map(data)
-    d_d = defragment_disk(d_m)
-    return get_check_sum(d_d)
+    d_s = get_disk_structure(data)
+    d_d = defragment_disk_by_files(d_s)
+    d_m = file_map(d_d)
+    return get_check_sum(d_m)
 
 
 if __name__ == "__main__":
-    disk_desc = (2, 4, 1, 3, 2, 5, 3)
-    res = get_disk_structure(disk_desc)
-    dstruct = defragment_disk_by_files(res)
-    print("----------dstruct---------")
-    pprint(dstruct)
+    res = main("data_main_input.txt")
+    print(res)
