@@ -5,5 +5,23 @@ def get_trail_score(t_map: list[list[int]], t_head: tuple[int]) -> int:
         Вообще путь полностью записывать не нужно, можно только корректную последнюю точку.
         Если у точки нет соседей +1, то удалить путь до этой точки из списка.
     """
+    steps = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+    h_bound = len(t_map[0])
+    v_bound = len(t_map)
     trails = [t_head]
-    
+    for point in range(1, 10):
+        print(f"{point=}--{trails=}")
+        tmp_trails = trails.copy()
+        trails = []
+        for last in tmp_trails:
+            for step in steps:
+                next = list(sum(x) for x in zip(last, step))
+                y, x = next
+                if y in range (v_bound) and x in range(h_bound) and t_map[y][x] == point:
+                    trails.append((y, x))
+    return len(trails)
+
+
+if __name__ == "__main__":
+    from data_simple_test import t_map
+    get_trail_score(t_map, (0,3))
