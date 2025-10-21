@@ -1,5 +1,9 @@
 from hiking_trails import get_trail_score
-import data_simple_test
+from data_simple_test import t_map as simple_t_map
+from data_middle_test import t_map as middle_t_map
 
 def test_get_simple_trail_score():
-    assert get_trail_score(data_simple_test.t_map, (0, 3)) == 2
+    assert get_trail_score(simple_t_map, (0, 3)) == 2
+
+def test_get_middle_trail_score():
+    assert get_trail_score(middle_t_map, (0, 2)) == 5

@@ -10,7 +10,6 @@ def get_trail_score(t_map: list[list[int]], t_head: tuple[int]) -> int:
     v_bound = len(t_map)
     trails = [t_head]
     for point in range(1, 10):
-        print(f"{point=}--{trails=}")
         tmp_trails = trails.copy()
         trails = []
         for last in tmp_trails:
@@ -19,6 +18,7 @@ def get_trail_score(t_map: list[list[int]], t_head: tuple[int]) -> int:
                 y, x = next
                 if y in range (v_bound) and x in range(h_bound) and t_map[y][x] == point:
                     trails.append((y, x))
+        print(f"{point=}--{trails=}")
     return len(trails)
 
 
