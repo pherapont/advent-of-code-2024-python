@@ -1,4 +1,4 @@
-from hiking_trails import get_trail_score, get_trail_map
+from hiking_trails import get_trail_score, get_trail_map, main
 from data_simple_test import t_map as simple_t_map
 from data_middle_test import t_map as middle_t_map
 
@@ -10,3 +10,6 @@ def test_get_middle_trail_score():
 
 def test_get_data():
     assert get_trail_map("data_middle_test.txt") == middle_t_map
+
+def test_main():
+    assert main("data_middle_test.txt") == 36

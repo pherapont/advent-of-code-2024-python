@@ -28,10 +28,18 @@ def get_trail_score(t_map: list[list[int]], t_head: tuple[int]) -> int:
                 y, x = next
                 if y in range (v_bound) and x in range(h_bound) and t_map[y][x] == point:
                     trails.add((y, x))
-        print(f"{point=}--{trails=}")
     return len(trails)
 
+def main(file_name: str) -> int:
+    t_map = get_trail_map(file_name)
+    res = 0
+    for y, line in enumerate(t_map):
+        for x, elem in enumerate(line):
+            if elem == 0:
+                score = get_trail_score(t_map, (y, x))
+                res += score
+    return res
 
 if __name__ == "__main__":
-    from data_simple_test import t_map
-    get_trail_score(t_map, (0,3))
+    res = main("data_main_input.txt")
+    print(res)
