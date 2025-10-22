@@ -65,21 +65,19 @@ def main(file_name: str, blink_count: int) -> int:
     cash1 = {}
     cash2 = {}
     for stone in data:
-        print(f"{stone=}")
-        data1 = transform_one_stone(stone, 5)
+        data1 = transform_one_stone(stone, 25)
         for elem in data1:
+            print(f"{stone=}--{elem=}")
             res_elem = 0
             if elem in cash1:
                 res += cash1[elem]
-                print(cash1)
                 continue
-            data2 = transform_one_stone(elem, 10)
+            data2 = transform_one_stone(elem, 25)
             for el in data2:
                 if el in cash2:
-                    res += cash2[el]
-                    print(cash2)
+                    res_elem += cash2[el]
                     continue
-                res_el = len(transform_one_stone(el, 10))
+                res_el = len(transform_one_stone(el, 25))
                 cash2[el] = res_el
                 res_elem += res_el
             cash1[elem] = res_elem
