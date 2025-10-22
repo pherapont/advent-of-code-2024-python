@@ -62,14 +62,28 @@ def transform_one_stone(stn: str, blinks: int) -> list[str]:
 def main(file_name: str, blink_count: int) -> int:
     data = get_data_from_file(file_name)
     res = 0
+    cash1 = {}
+    cash2 = {}
     for stone in data:
         print(f"{stone=}")
-        data1 = transform_one_stone(stone, 25)
+        data1 = transform_one_stone(stone, 5)
         for elem in data1:
-            print(f"{elem=}")
-            data2 = transform_one_stone(elem, 25)
+            res_elem = 0
+            if elem in cash1:
+                res += cash1[elem]
+                print(cash1)
+                continue
+            data2 = transform_one_stone(elem, 10)
             for el in data2:
-                res += len(transform_one_stone(el, 25))
+                if el in cash2:
+                    res += cash2[el]
+                    print(cash2)
+                    continue
+                res_el = len(transform_one_stone(el, 10))
+                cash2[el] = res_el
+                res_elem += res_el
+            cash1[elem] = res_elem
+            res += res_elem
     return res
 
 
