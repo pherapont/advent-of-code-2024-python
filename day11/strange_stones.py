@@ -1,3 +1,11 @@
+def get_data_from_file(file_name: str) -> tuple[str]:
+    res = []
+    with open(file_name) as f:
+        line = f.readline()
+        res = line.split()
+    return tuple(res)
+
+
 def transform_stones(stones: tuple[str], blinks: int) -> list[str]:
     """
     1) If the stone is engraved with the number 0, it is replaced by a stone engraved with the number 1.
@@ -20,9 +28,19 @@ def transform_stones(stones: tuple[str], blinks: int) -> list[str]:
                 mid = len(stone) // 2
                 first = stone[:mid]
                 new_stones.append(first)
-                last = stone[mid:]
+                # отбрасывание передних незначачих нулей
+                last = str(int(stone[mid:]))
                 new_stones.append(last)
             else:
                 new_stone = str(int(stone) * 2024)
                 new_stones.append(new_stone)
     return new_stones
+
+def main(file_name: str, blink_count: int) -> int:
+    data = get_data_from_file(file_name)
+    t_s = transform_stones(data, blink_count)
+    return len(t_s)
+
+if __name__ == "__main__":
+    res = main("main_data.txt", 25)
+    print(res)
