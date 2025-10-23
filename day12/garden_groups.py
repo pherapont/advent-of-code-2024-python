@@ -17,24 +17,23 @@ def region_cost(region: tuple[tuple[int]]) -> int:
     ...
 
 def explore_region(garden: tuple[tuple[str]], init_point: tuple[int]) -> tuple[tuple[int]]:
-    y, x = init_point
-    plant = garden[y][x]
-    region = [(y, x)]
-    flag = True
-    # Недостаточно найти одну релевантную точку и пойти дальше - так можно потерять соседние
-    # надо собирать все релевантные точки и от всех идти дальше, пока все не дойдут до тупика
-    # Это - дерево
-    # т.е надо массив актуальных точек исследования и работать пока его длина не станет = 0
-    while flag:
-        flag =  False
-        for direct in directs:
-            ny, nx = [sum(x) for x in zip((y, x), direct)]
-            if garden[ny][nx] == plant and (ny, nx) not in visited:
-                flag = True
-                visited.append((ny, nx))
-                region.append((ny, nx))
-                y, x = ny, nx
-
+    y_size = len(garden)
+    x_size = len(garden[0])
+    region = [init_point]
+    work_points: list[tuple[int]] = [init_point]
+    plant = garden[init_point[0]][init_point[1]]
+    while len(work_points) > 0:
+        for point in work_points:
+            py, px = point
+            for direct in directs:
+                ny, nx = [sum(x) for x in zip((py, px), direct)]
+                in_garden: bool = ny in range(y_size) and nx in range(x_size)
+                if in_garden and garden[ny][nx] == plant and (ny, nx) not in visited:
+                    visited.append((ny, nx))
+                    work_points.append((ny, nx))
+                    region.append((ny, nx))
+            work_points.remove(point)
+    return region
 
 
 
