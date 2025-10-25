@@ -3,7 +3,14 @@ all_visited: list[tuple[int]] = []
 
 
 def region_cost(region: tuple[tuple[int]]) -> int:
-    ...
+    # границы по вертикали = сумма всех подстрок * 2
+    # подстрока = целая строка без разрывов или участки строк между разрывами
+    subline = []
+    line_num: int = region[0][0] 
+    for el in region:
+        y, x = el
+        if y == line_num:
+            Z
 
 def explore_region(garden: tuple[tuple[str]], init_point: tuple[int]) -> tuple[tuple[int]]:
     y_size = len(garden)
