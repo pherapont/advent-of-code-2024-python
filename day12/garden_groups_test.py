@@ -17,3 +17,6 @@ class Test_first_garden():
 
     def test_region_in_simple_garder(self):
         assert explore_region(self.data, (1, 2)) == tuple(sorted(self.regionC))
+
+    def test_bounds_count(self):
+        assert 0 == 0

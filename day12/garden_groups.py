@@ -2,15 +2,33 @@ directs = ((0, 1), (0, -1), (1, 0), (-1, 0))
 all_visited: list[tuple[int]] = []
 
 
-def region_cost(region: tuple[tuple[int]]) -> int:
-    # границы по вертикали = сумма всех подстрок * 2
-    # подстрока = целая строка без разрывов или участки строк между разрывами
-    subline = []
-    line_num: int = region[0][0] 
-    for el in region:
+def bounds_count(region_vector: tuple[tuple[int]]) -> int:
+    """
+    границы по направлению = сумма всех подстрок * 2
+    подстрока = целая строка без разрывов или участки строк между разрывами
+    соответственно надо подсчитать по вертикали и горизонтали
+    """
+    struct_region = []
+    init_el = region_vector[0]
+    subline = [init_el]
+    line_num: int = init_el[0]
+    if len(region_vector) == 1:
+        struct_region.append(subline) 
+    for el in region_vector[1:]:
         y, x = el
-        if y == line_num:
-            Z
+        if y == line_num and x == subline[-1][1] + 1:
+            subline.append(el)
+        else:
+            struct_region.append(subline)
+            subline = [el]
+            line_num = y
+    return len(struct_region) * 2
+
+
+def region_cost(region: tuple[tuple[int]]) -> int:
+    first_half_cost = bounds_count(region)
+    # second - транспонировать матрицу и отдать в функуию bounds_count()
+    
 
 def explore_region(garden: tuple[tuple[str]], init_point: tuple[int]) -> tuple[tuple[int]]:
     y_size = len(garden)
