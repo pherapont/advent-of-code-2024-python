@@ -1,5 +1,5 @@
 import pytest
-from garden_groups import garden_regions, explore_region
+from garden_groups import explore_garden, explore_region, bounds_count
 
 class Test_first_garden():
     data = (("A", "A", "A", "A"), 
@@ -12,11 +12,21 @@ class Test_first_garden():
 
     @pytest.mark.skip(reason="not ready func")
     def test_simple_garden(self):
-        assert garden_regions(self.data) == 140
+        assert explore_garden(self.data) == 140
 
 
-    def test_region_in_simple_garder(self):
-        assert explore_region(self.data, (1, 2)) == tuple(sorted(self.regionC))
+    def test_region_C_in_simple_garden(self):
+        assert explore_region(self.data, (1, 2),
+                    "C") == tuple(sorted(self.regionC))
 
-    def test_bounds_count(self):
-        assert 0 == 0
+    def test_region_B_in_simple_garden(self):
+        assert explore_region(self.data, (1, 0),
+                    "B") == tuple(sorted(self.regionB))
+
+    def test_region_B_bounds_count(self):
+        assert bounds_count(self.regionB) == 4
+
+    def test_region_C_bounds_count(self):
+        assert bounds_count(self.regionC) == 6
+        
+#TODO: нужны тесты для сложного региона boundsc_count
