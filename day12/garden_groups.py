@@ -5,8 +5,6 @@ def bounds_count(region_vector: list[tuple[int]]) -> int:
     init_el = region_vector[0]
     subline = [init_el]
     line_num: int = init_el[0]
-    if len(region_vector) == 1:
-        struct_region.append(init_el) 
     for el in region_vector[1:]:
         y, x = el
         if y == line_num and x == subline[-1][1] + 1:
@@ -28,7 +26,7 @@ def region_cost(region: list[tuple[int]]) -> int:
     print(f"{row_bounds_count=}")
     print(f"{column_bounds_count=}")
     return (row_bounds_count + column_bounds_count) * len(region)
-    
+
 
 def explore_region(garden: tuple[tuple[str]],
                 visited: list[tuple[int]],
@@ -65,3 +63,22 @@ def explore_garden(garden: tuple[tuple[str]]) -> int:
             common_cost += cost
             print(f"{plant=} - {cost=}")
     return common_cost
+
+
+def get_garden(file_name: str) -> tuple[tuple[str]]:
+    garden = []
+    with open(file_name) as  fi:
+        for line in fi:
+            garden.append(tuple(line.strip()))
+    return tuple(garden)
+
+
+def main(file_name:str) -> int:
+    garden = get_garden(file_name)
+    res = explore_garden(garden)
+    return res
+
+
+if __name__ == "__main__":
+    res = main("main_input.txt")
+    print(res)
