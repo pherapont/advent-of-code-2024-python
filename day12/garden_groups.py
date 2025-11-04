@@ -1,14 +1,6 @@
 directs = ((0, 1), (0, -1), (1, 0), (-1, 0))
 
-visited: list[tuple[int]] = []
-
-
-def bounds_count(region_vector: tuple[tuple[int]]) -> int:
-    """
-    границы по направлению = сумма всех подстрок * 2
-    подстрока = целая строка без разрывов или участки строк между разрывами
-    соответственно надо подсчитать по вертикали и горизонтали
-    """
+def bounds_count(region_vector: list[tuple[int]]) -> int:
     struct_region = []
     init_el = region_vector[0]
     subline = [init_el]
@@ -24,16 +16,22 @@ def bounds_count(region_vector: tuple[tuple[int]]) -> int:
             subline = [el]
             line_num = y
     struct_region.append(subline)
-    print(struct_region)
     return len(struct_region) * 2
 
 
-def region_cost(region: tuple[tuple[int]]) -> int:
-    first_half_cost = bounds_count(region)
-    # second - транспонировать матрицу и отдать в функуию bounds_count()
+def region_cost(region: list[tuple[int]]) -> int:
+    row_bounds_count = bounds_count(region)
+    rotate_region = sorted([tuple(reversed(x)) for x in region])
+    column_bounds_count = bounds_count(rotate_region)
+    len_region = len(region)
+    print(f"{len_region=}")
+    print(f"{row_bounds_count=}")
+    print(f"{column_bounds_count=}")
+    return (row_bounds_count + column_bounds_count) * len(region)
     
 
 def explore_region(garden: tuple[tuple[str]],
+                visited: list[tuple[int]],
                 init_point: tuple[int],
                 plant: str
                 ) -> tuple[tuple[int]]:
@@ -56,12 +54,14 @@ def explore_region(garden: tuple[tuple[str]],
 
 
 def explore_garden(garden: tuple[tuple[str]]) -> int:
+    visited: list[tuple[int]] = []
     common_cost = 0
     for y, line in enumerate(garden):
         for x, plant in enumerate(line):
             if (y, x) in visited:
                 continue
-            region = explore_region(garden, (y, x), plant)
+            region = explore_region(garden, visited, (y, x), plant)
             cost = region_cost(region)
             common_cost += cost
+            print(f"{plant=} - {cost=}")
     return common_cost
