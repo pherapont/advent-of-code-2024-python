@@ -30,7 +30,7 @@ def sides_count(region_vector: list[tuple[int]]) -> int:
     sides: dict[str, list[int]] = {}
     for subline in struct_region:
         left_bound_key = f"l{subline[0][1]}"
-        right_bound_key = f"l{subline[-1][1]}"
+        right_bound_key = f"r{subline[-1][1]}"
         for key in (left_bound_key, right_bound_key):
             if key in sides:
                 sides[key].append(subline[0][0])
