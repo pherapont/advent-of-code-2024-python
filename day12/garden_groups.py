@@ -1,6 +1,7 @@
 directs = ((0, 1), (0, -1), (1, 0), (-1, 0))
 
-def bounds_count(region_vector: list[tuple[int]]) -> int:
+def get_struct_region(region_vector: list[tuple[int]]
+                      ) -> list[list[tuple[int]]]:
     struct_region = []
     init_el = region_vector[0]
     subline = [init_el]
@@ -14,7 +15,16 @@ def bounds_count(region_vector: list[tuple[int]]) -> int:
             subline = [el]
             line_num = y
     struct_region.append(subline)
+    return struct_region
+
+
+def bounds_count(region_vector: list[tuple[int]]) -> int:
+    struct_region = get_struct_region(region_vector)
     return len(struct_region) * 2
+
+
+def sides_count(region_vector: list[tuple[int]]) -> int:
+    ...
 
 
 def region_cost(region: list[tuple[int]]) -> int:
