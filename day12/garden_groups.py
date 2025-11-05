@@ -24,7 +24,28 @@ def bounds_count(region_vector: list[tuple[int]]) -> int:
 
 
 def sides_count(region_vector: list[tuple[int]]) -> int:
-    ...
+    struct_region = get_struct_region(region_vector)
+    res = 0
+    # dict l1 =left of 1; r2 right bound of 2 point
+    sides: dict[str, list[int]] = {}
+    for subline in struct_region:
+        left_bound_key = f"l{subline[0][1]}"
+        right_bound_key = f"l{subline[-1][1]}"
+        for key in (left_bound_key, right_bound_key):
+            if key in sides:
+                sides[key].append(subline[0][0])
+            else:
+                sides[key] = [subline[0][0]]
+    # Считаем стороны. В ячейке словаря может быть несколько сторон
+    print(sides)
+    for _, value in sides:
+        for index, el in enumerate(value):
+            if index > 0 and el == value[index - 1] + 1:
+                continue
+            else:
+                res += 1
+        res += 1
+    return res
 
 
 def region_cost(region: list[tuple[int]]) -> int:

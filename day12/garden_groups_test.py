@@ -1,6 +1,7 @@
 import pytest
 from garden_groups import (explore_garden, explore_region,
-                         bounds_count, region_cost, get_garden, main)
+                         bounds_count, region_cost, get_garden, main,
+                        sides_count)
 
 class Test_first_garden():
     data = (("A", "A", "A", "A"), 
@@ -51,3 +52,6 @@ class Test_first_garden():
 
     def test_main_middle_file(self):
         assert main("middle_input.txt") == 1930
+
+    def test_regionB_sides_count(self):
+        assert sides_count(self.regionB) == 2
