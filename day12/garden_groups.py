@@ -60,26 +60,29 @@ def sides_count(region_vector: list[tuple[int, int]]) -> int:
     return res
 
 
-def region_cost(region: list[tuple[int]]) -> int:
+def region_cost(region: list[tuple[int, int]]) -> int:
     row_bounds_count = bounds_count(region)
-    rotate_region = sorted([tuple(reversed(x)) for x in region])
+    rotate_region: list[tuple[int, int]] = sorted([tuple(reversed(x)) for x in region])
     column_bounds_count = bounds_count(rotate_region)
-    len_region = len(region)
-    print(f"{len_region=}")
-    print(f"{row_bounds_count=}")
-    print(f"{column_bounds_count=}")
     return (row_bounds_count + column_bounds_count) * len(region)
 
 
+def region_discounted_cost(region: list[tuple[int, int]]) -> int:
+    row_sides_count = sides_count(region)
+    rotate_region = sorted([tuple(reversed(x)) for x in region])
+    column_sides_count = sides_count(rotate_region)
+    return (row_sides_count + column_sides_count) * len(region)
+
+
 def explore_region(garden: tuple[tuple[str]],
-                visited: list[tuple[int]],
-                init_point: tuple[int],
+                visited: list[tuple[int, int]],
+                init_point: tuple[int, int],
                 plant: str
-                ) -> tuple[tuple[int]]:
+                ) -> tuple[tuple[int, int]]:
     y_size = len(garden)
     x_size = len(garden[0])
     region = [init_point]
-    work_points: list[tuple[int]] = [init_point]
+    work_points: list[tuple[int, int]] = [init_point]
     visited.append(init_point)
     while len(work_points) > 0:
         for point in work_points:
@@ -95,14 +98,15 @@ def explore_region(garden: tuple[tuple[str]],
 
 
 def explore_garden(garden: tuple[tuple[str]]) -> int:
-    visited: list[tuple[int]] = []
+    visited: list[tuple[int, int]] = []
     common_cost = 0
     for y, line in enumerate(garden):
         for x, plant in enumerate(line):
             if (y, x) in visited:
                 continue
             region = explore_region(garden, visited, (y, x), plant)
-            cost = region_cost(region)
+            # cost = region_cost(region)
+            cost = region_discounted_cost(region)
             common_cost += cost
             print(f"{plant=} - {cost=}")
     return common_cost
@@ -123,6 +127,5 @@ def main(file_name:str) -> int:
 
 
 if __name__ == "__main__":
-    regionB = [(1, 0), (1, 1), (2, 0), (2, 1)]
-    res = sides_count(regionB)
+    res = main("main_input.txt")
     print(res)

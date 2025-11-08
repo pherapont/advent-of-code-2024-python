@@ -71,3 +71,9 @@ class Test_first_garden():
 
         def test_regionD_sides_count(self):
             assert sides_count(self.regionD) == 4
+
+        def test_main_simple_file(self):
+            assert main("simple_input.txt") == 80
+
+        def test_main_middle_file(self):
+            assert main("middle_input.txt") == 1206
