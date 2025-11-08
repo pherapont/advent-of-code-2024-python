@@ -1,10 +1,15 @@
 directs = ((0, 1), (0, -1), (1, 0), (-1, 0))
 
-def get_struct_region(region_vector: list[tuple[int]]
-                      ) -> list[list[tuple[int]]]:
-    struct_region = []
-    init_el = region_vector[0]
-    subline = [init_el]
+def get_struct_region(region_vector: list[tuple[int, int]]
+                      ) -> list[list[tuple[int, int]]]:
+    """
+    Функция разбивает поле координат точек на подстроки.
+    Определение подстроки: 1) находится в одной строке (равенство коорд 1)
+        2) нет разрывов в координате 2
+    """
+    struct_region: list[list[tuple[int, int]]] = []
+    init_el: tuple[int, int] = region_vector[0]
+    subline: list[tuple[int, int]] = [init_el]
     line_num: int = init_el[0]
     for el in region_vector[1:]:
         y, x = el
@@ -18,29 +23,36 @@ def get_struct_region(region_vector: list[tuple[int]]
     return struct_region
 
 
-def bounds_count(region_vector: list[tuple[int]]) -> int:
-    struct_region = get_struct_region(region_vector)
+def bounds_count(region_vector: list[tuple[int, int]]) -> int:
+    struct_region: list[list[tuple[int, int]]] = get_struct_region(region_vector)
     return len(struct_region) * 2
 
 
-def sides_count(region_vector: list[tuple[int]]) -> int:
-    struct_region = get_struct_region(region_vector)
-    res = 0
+def sides_count(region_vector: list[tuple[int, int]]) -> int:
+    """
+    Каждая подстрока имеет левую и правую вертикальные границы.
+    Каждая вертикальная граница имеет горизонтальную координату.
+    В словарь с именами границ в ключах собираем номера строк, где они есть.
+    """
+    struct_region: list[list[tuple[int, int]]] = get_struct_region(region_vector)
+    res: int = 0
     # dict l1 =left of 1; r2 right bound of 2 point
     sides: dict[str, list[int]] = {}
     for subline in struct_region:
         left_bound_key = f"l{subline[0][1]}"
         right_bound_key = f"r{subline[-1][1]}"
+        # Номер строки одинаков как для левой так и для правой границ
         for key in (left_bound_key, right_bound_key):
             if key in sides:
                 sides[key].append(subline[0][0])
             else:
                 sides[key] = [subline[0][0]]
     # Считаем стороны. В ячейке словаря может быть несколько сторон
-    print(sides)
-    for _, value in sides:
+    for _, value in sides.items():
         for index, el in enumerate(value):
-            if index > 0 and el == value[index - 1] + 1:
+            if index == 0:
+                continue
+            elif index > 0 and el == value[index - 1] + 1:
                 continue
             else:
                 res += 1
@@ -111,5 +123,6 @@ def main(file_name:str) -> int:
 
 
 if __name__ == "__main__":
-    res = main("main_input.txt")
+    regionB = [(1, 0), (1, 1), (2, 0), (2, 1)]
+    res = sides_count(regionB)
     print(res)
