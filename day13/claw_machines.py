@@ -1,3 +1,24 @@
+def get_initial_steps_count(machine: tuple[int, int],
+                     location: tuple[int, int]
+                     ) -> int:
+    """
+    Функция оценивает какое кол. шагов нужно для достижения или перелета
+    конечным автоматом цели в одиночку.
+    Правда эта оценка очень неточная, т.к. вклад каждой координаты в 
+    достижение цели неравномерный и , возможно, отставший автомат, по другой
+    координате внесет решающий вклад.
+    Нужно или вносить какие-то весовые характеристики в координаты или тупо
+    перебирать все варианты.
+    """
+    x, tail = divmod(location[0], machine[0])
+    if tail:
+        x += 1
+    y, tail = divmod(location[1], machine[1])
+    if tail:
+        y += 1
+    return x + y
+
+
 def get_cheapest_way(a: tuple[int],
                      b: tuple[int],
                      location: tuple[int]
@@ -8,11 +29,10 @@ def get_cheapest_way(a: tuple[int],
     сканирование не уйдет дальше цеши.
     """
     wins: list[tuple[int, int]] = []
-    steps_a = max(location[0] // a[0], location[1] // a[1])
-    steps_b = max(location[0] // b[0], location[1] // b[1])
-    print(steps_a)
-    print(steps_b)
-
+    init_cost_a = get_initial_steps_count(a, location) * 3
+    init_cost_b = get_initial_steps_count(b, location)
+    print(f"{init_cost_a=}")
+    print(f"{init_cost_b=}")
 
 if __name__ == '__main__':
     a = (94, 34)
