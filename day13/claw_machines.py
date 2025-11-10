@@ -34,8 +34,42 @@ def get_cheapest_way(a: tuple[int],
     print(f"{init_cost_a=}")
     print(f"{init_cost_b=}")
 
+
+def get_cheapest_coordinates(
+        a: tuple[int, int],
+        b: tuple[int, int],
+        location: tuple[int, int]
+        ) -> int:
+    """
+    1) Находим сочетания Ax, Bx, которые приведут к цели по x
+    2) Находим сочетания Ay, By, которые приведут к цели по y
+    3) Находим одинаковые пары сочетаний.
+    Победит пара, имеюшая наименьшеую цену.
+    """
+    wins: list[tuple[int, int]] = []
+    ax_steps, rest = divmod(location[0], a[0])
+    bx_steps = 0
+    if rest:
+        ax_steps += 1
+    works = True
+    while ax_steps and works:
+        works = False
+        x_length = ax_steps * a[0] + bx_steps * b[0]
+        while x_length <= location[0]:
+            if x_length == location[0]:
+                wins.append((ax_steps, bx_steps))
+            else:
+                continue
+        if ax_steps:
+            works = True
+        ax_steps -= 1
+    res_arr = [(x * 3, y) for x, y in wins]
+    res = min(res_arr)
+    return (res[0] // 3, res[1])
+    
+
 if __name__ == '__main__':
-    a = (94, 34)
-    b = (22, 67)
-    location = (8400, 5400)
-    get_cheapest_way(a, b, location)
+    a = (2, 2)
+    b = (3, 3)
+    location = (10, 10)
+    get_cheapest_coordinates(a, b, location)
