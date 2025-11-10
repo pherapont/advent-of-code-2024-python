@@ -15,4 +15,4 @@ def test_simple_result_steps():
     a = 2
     b = 3
     location = 10
-    assert get_result_steps(a, b, location) == [(5, 0), (2, 2)]
+    assert get_result_steps(a, b, location) == {(5, 0), (2, 2)}
