@@ -53,16 +53,19 @@ def get_cheapest_coordinates(
         ax_steps += 1
     works = True
     while ax_steps and works:
+        bx_steps = 0
         works = False
-        x_length = ax_steps * a[0] + bx_steps * b[0]
+        x_length = 0
         while x_length <= location[0]:
+            x_length = ax_steps * a[0] + bx_steps * b[0]
             if x_length == location[0]:
                 wins.append((ax_steps, bx_steps))
+                break
             else:
-                continue
+                bx_steps += 1
         if ax_steps:
             works = True
-        ax_steps -= 1
+            ax_steps -= 1
     res_arr = [(x * 3, y) for x, y in wins]
     res = min(res_arr)
     return (res[0] // 3, res[1])
@@ -72,4 +75,6 @@ if __name__ == '__main__':
     a = (2, 2)
     b = (3, 3)
     location = (10, 10)
-    get_cheapest_coordinates(a, b, location)
+    res = get_cheapest_coordinates(a, b, location)
+    print(res)
+
