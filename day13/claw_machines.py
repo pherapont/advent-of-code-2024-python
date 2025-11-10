@@ -8,11 +8,15 @@ def get_cheapest_way(a: tuple[int],
     3) Находим одинаковые пары сочетаний.
     Победит пара, имеюшая наименьшеую цену.
     """
-    wins: set[tuple[int, int]] = set()
     res_x = get_result_steps(a[0], b[0], location[0])
     res_y = get_result_steps(a[1], b[1], location[1])
-    print(f"{res_x=}")
-    print(f"{res_y=}")
+    wins: set[tuple[int, int]] = res_x & res_y
+    normed_wins = {win: win[0] * 3 + win[1] for win in wins}
+    if normed_wins:
+        win = min(normed_wins, key=normed_wins.get)
+        return normed_wins[win]
+    else:
+        return 0
 
 
 def get_result_steps(
@@ -51,8 +55,8 @@ def get_result_steps(
     
 
 if __name__ == '__main__':
-    a = (2, 2)
-    b = (3, 3)
-    location = (10, 11)
+    a = (94, 34)
+    b = (22, 67)
+    location = (8400, 5400)
     res = get_cheapest_way(a, b, location)
     print(res)

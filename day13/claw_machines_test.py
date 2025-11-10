@@ -4,7 +4,6 @@ from claw_machines import (
     get_result_steps,
     )
 
-@pytest.mark.skip(reason="while in rest")
 def test_one_prize():
     a = (94, 34)
     b = (22, 67)
