@@ -38,6 +38,7 @@ def get_result_steps(
         ax_steps += 1
     works = True
     while ax_steps and works:
+        print(f"{wins=}")
         bx_steps = 0
         works = False
         x_length = 0
@@ -55,8 +56,8 @@ def get_result_steps(
     
 
 if __name__ == '__main__':
-    a = (94, 34)
-    b = (22, 67)
-    location = (8400, 5400)
+    a = (33, 75)
+    b = (112, 1050)
+    location = (250000, 9999999)
     res = get_cheapest_way(a, b, location)
     print(res)
