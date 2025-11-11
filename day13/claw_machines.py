@@ -1,3 +1,8 @@
+from collections import namedtuple
+
+Machine = namedtuple("Machine", ["a", "b", "loc"])
+
+
 def get_cheapest_way(a: tuple[int],
                      b: tuple[int],
                      location: tuple[int]
@@ -38,7 +43,6 @@ def get_result_steps(
         ax_steps += 1
     works = True
     while ax_steps and works:
-        print(f"{wins=}")
         bx_steps = 0
         works = False
         x_length = 0
@@ -55,9 +59,43 @@ def get_result_steps(
     return wins
     
 
+def get_file_data(file_name: str) -> list[Machine]:
+    res = []
+    a: tuple[int, int]
+    b: tuple[int, int]
+    loc: tuple[int, int]
+    with open(file_name) as data_file:
+        for line in data_file:
+            a: tuple[int, int]
+            b: tuple[int, int]
+            loc: tuple[int, int]
+            if line.strip():
+                name, coord = line.split(":")
+                if name.startswith("Button"):
+                    n = name.split()[1].strip()
+                    coords = [x.split("+")[1] for x in coord.split(",")]
+                    if n == "A":
+                        a = tuple(int(x) for x in coords)
+                    else:
+                        b = tuple(int(x) for x in coords)
+                else:
+                    coords = [x.split("=")[1] for x in coord.split(",")]
+                    loc = tuple(int(x) for x in coords)
+            else:
+                res.append(Machine(a, b, loc))
+        res.append(Machine(a, b, loc))
+    return res    
+
+
+def main(file_name: str) ->int:
+    res = 0
+    data = get_file_data(file_name)
+    for m in data:
+        price = get_cheapest_way(m.a, m.b, m.loc)
+        res += price
+    return res
+
+
 if __name__ == '__main__':
-    a = (33, 75)
-    b = (112, 1050)
-    location = (250000, 9999999)
-    res = get_cheapest_way(a, b, location)
+    res = main("main_data.txt")
     print(res)
