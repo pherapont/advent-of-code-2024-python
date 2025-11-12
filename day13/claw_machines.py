@@ -24,6 +24,27 @@ def get_cheapest_way(a: tuple[int],
         return 0
 
 
+def get_cheapest_math(a: tuple[int],
+                     b: tuple[int],
+                     loc: tuple[int]
+                     ) -> int:
+    """
+    Количество шагов каждой кнопкой находим решая систему 2 уравнений
+    с 2 неизвестными. Это позволит решить задачу с огромными числами.
+    """
+    res = 0
+    descr: int = b[0] * a[1] - b[1] * a[0]
+    if descr == 0:
+        return get_cheapest_way(a, b, loc)
+    res_b, rest = divmod((loc[0] * a[1] - loc[1] * a[0]), descr)
+    if rest:
+        return 0
+    res_a, rest = divmod((loc[1] - res_b * b[1]), a[1]) 
+    if rest:
+        return 0
+    return res
+
+
 def get_result_steps(
         ax: int,
         bx: int,
@@ -89,7 +110,7 @@ def get_file_data(file_name: str) -> list[Machine]:
 
 def main(file_name: str) ->int:
     res = 0
-    data = get_file_data(file_name)
+    data: list[Machine] = get_file_data(file_name)
     for m in data:
         price = get_cheapest_way(m.a, m.b, m.loc)
         res += price

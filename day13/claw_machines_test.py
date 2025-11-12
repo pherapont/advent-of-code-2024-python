@@ -4,6 +4,7 @@ from claw_machines import (
     get_result_steps,
     get_file_data,
     main,
+    get_cheapest_math,
     Machine,
     )
 
@@ -45,3 +46,9 @@ def test_get_data_from_simple_file():
 def test_complex_test1data():
     file_name = "test1_data.txt"
     assert main(file_name) == 480
+
+def test_1_math_prize():
+    a = (94, 34)
+    b = (22, 67)
+    location = (8400, 5400)
+    assert get_cheapest_math(a, b, location) == 280
